@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "deploy": "sh deploy.sh"
   },
   "dependencies": {
     "@syncfusion/ej2-vue-buttons": "^18.3.47",
