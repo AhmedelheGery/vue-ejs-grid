@@ -1,18 +1,41 @@
 <template>
   <div id="app" v-if="users.length > 0">
-    <div class="search-wrapper">
-      <div class="e-float-input" style="width: 200px; display: inline-block;">
-        <input type="text" class="searchtext" />
-        <span class="e-float-line"></span>
-        <label class="e-float-text">Search text</label>
+    <div class="header">
+      <div class="search-wrapper">
+        <div class="e-float-input" style="width: 200px; display: inline-block;">
+          <input type="text" class="searchtext" />
+          <span class="e-float-line"></span>
+          <label class="e-float-text">Search text</label>
+        </div>
+        <ejs-button
+          class="e-success e-outline"
+          id="search"
+          @click.native="search"
+          >Search</ejs-button
+        >
       </div>
-      <ejs-button id="search" @click.native="search">Search</ejs-button>
+      <div class="hide-columns-wrapper">
+        <ejs-button 
+        class="e-info e-outline"
+         @click.native="show">open Column Chooser </ejs-button>
+      </div>
+      <div class="records-input-wrapper">
+        <div class="e-float-input" style="width: 200px; display: inline-block;">
+          <input type="number" class="searchtext" v-model="recordsNumber" />
+          <span class="e-float-line"></span>
+          <label class="e-float-text">Enter Records Number</label>
+        </div>
+      </div>
     </div>
 
     <ejs-grid
       ref="grid"
       :dataSource="usersData"
       :allowFiltering="true"
+      :allowPaging="true"
+      :pageSettings="{ pageSize: recordsNumber }"
+      :allowSorting="true"
+      :showColumnChooser='true'
       height="600px"
     >
       <e-columns>
@@ -56,25 +79,45 @@
     </ejs-grid>
   </div>
 </template>
+
 <script>
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
-import { GridPlugin, Filter, Search } from "@syncfusion/ej2-vue-grids";
+import {
+  GridPlugin,
+  Filter,
+  Search,
+  Page,
+  Sort,
+  ColumnChooser,
+} from "@syncfusion/ej2-vue-grids";
 import { ButtonPlugin } from "@syncfusion/ej2-vue-buttons";
 
 Vue.use(GridPlugin);
 Vue.use(ButtonPlugin);
 
 export default {
+  data() {
+    return {
+      recordsNumber: 10,
+    };
+  },
   methods: {
     ...mapActions(["fetchUsers"]),
     search: function() {
       let searchText = document.getElementsByClassName("searchtext")[0].value;
       this.$refs.grid.search(searchText);
     },
-   randomDate(start, end) {
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toISOString().slice(0,10);
-},
+    randomDate(start, end) {
+      return new Date(
+        start.getTime() + Math.random() * (end.getTime() - start.getTime())
+      )
+        .toISOString()
+        .slice(0, 10);
+    },
+        show: function() {
+        this.$refs.grid.ej2Instances.columnChooserModule.openColumnChooser(200, 50); // give X and Y axis
+    }
   },
   computed: {
     ...mapState(["users"]),
@@ -99,7 +142,7 @@ export default {
     this.fetchUsers();
   },
   provide: {
-    grid: [Search, Filter],
+    grid: [Search, Filter, Page, Sort, ColumnChooser],
   },
 };
 </script>
@@ -113,4 +156,10 @@ export default {
 @import "../../node_modules/@syncfusion/ej2-popups/styles/material.css";
 @import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
 @import "../../node_modules/@syncfusion/ej2-vue-grids/styles/material.css";
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1%;
+}
 </style>
