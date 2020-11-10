@@ -1,16 +1,19 @@
 <template>
-  <div id="app">
-    <div class="e-float-input" style="width: 200px; display: inline-block;">
-      <input type="text" class="searchtext" />
-      <span class="e-float-line"></span>
-      <label class="e-float-text">Search text</label>
+  <div id="app" v-if="users.length > 0">
+    <div class="search-wrapper">
+      <div class="e-float-input" style="width: 200px; display: inline-block;">
+        <input type="text" class="searchtext" />
+        <span class="e-float-line"></span>
+        <label class="e-float-text">Search text</label>
+      </div>
+      <ejs-button id="search" @click.native="search">Search</ejs-button>
     </div>
-    <ejs-button id="search" @click.native="search">Search</ejs-button>
+
     <ejs-grid
       ref="grid"
-      :dataSource="data"
+      :dataSource="usersData"
       :allowFiltering="true"
-      height="262px"
+      height="600px"
     >
       <e-columns>
         <e-column
@@ -55,6 +58,7 @@
 </template>
 <script>
 import Vue from "vue";
+import { mapActions, mapState } from "vuex";
 import { GridPlugin, Filter, Search } from "@syncfusion/ej2-vue-grids";
 import { ButtonPlugin } from "@syncfusion/ej2-vue-buttons";
 
@@ -62,41 +66,37 @@ Vue.use(GridPlugin);
 Vue.use(ButtonPlugin);
 
 export default {
-  data() {
-    return {
-      data: [
-        {
-          ID: 10248,
-          Name: "VINET",
-          Birth: 32.38,
-          Salary: 1000,
-          Email: "test@test.co",
-          Mobile: 123456,
-        },
-        {
-          ID: 10249,
-          Name: "TOMSP",
-          Birth: 11.61,
-          Salary: 1000,
-          Email: "test@test.co",
-          Mobile: 123456,
-        },
-        {
-          ID: 10250,
-          Name: "HANAR",
-          Birth: 65.83,
-          Salary: 1000,
-          Email: "test@test.co",
-          Mobile: 123456,
-        },
-      ],
-    };
-  },
   methods: {
+    ...mapActions(["fetchUsers"]),
     search: function() {
       let searchText = document.getElementsByClassName("searchtext")[0].value;
       this.$refs.grid.search(searchText);
     },
+   randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toISOString().slice(0,10);
+},
+  },
+  computed: {
+    ...mapState(["users"]),
+    usersData() {
+      let users;
+      users =
+        this.users &&
+        this.users.map((user) => {
+          return {
+            ID: user.id,
+            Name: user.name,
+            Birth: this.randomDate(new Date(1990, 0, 1), new Date()),
+            Salary: user.address.zipcode,
+            Email: user.email,
+            Mobile: user.phone,
+          };
+        });
+      return users;
+    },
+  },
+  mounted() {
+    this.fetchUsers();
   },
   provide: {
     grid: [Search, Filter],
