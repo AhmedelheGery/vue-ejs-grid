@@ -26,12 +26,11 @@
           <label class="e-float-text">Enter Records Number</label>
         </div>
       </div>
-      <button @click="editColumn">edit</button>
     </div>
 
     <ejs-grid
       ref="grid"
-      id='Grid'
+      id="Grid"
       :dataSource="usersData"
       :allowFiltering="true"
       :allowPaging="true"
@@ -42,7 +41,7 @@
       :allowPdfExport="true"
       :toolbarClick="toolbarClick"
       :toolbar="toolbarOptions"
-      :allowExcelExport='true'
+      :allowExcelExport="true"
       height="600px"
     >
       <e-columns>
@@ -98,9 +97,9 @@ import {
   Sort,
   ColumnChooser,
   Edit,
-  Toolbar, 
+  Toolbar,
   PdfExport,
-  ExcelExport
+  ExcelExport,
 } from "@syncfusion/ej2-vue-grids";
 import { ButtonPlugin } from "@syncfusion/ej2-vue-buttons";
 
@@ -112,7 +111,7 @@ export default {
     return {
       recordsNumber: 10,
       editSettings: { allowEditing: true },
-      toolbarOptions: ['PdfExport','ExcelExport']
+      toolbarOptions: ["PdfExport", "ExcelExport"],
     };
   },
   methods: {
@@ -137,21 +136,20 @@ export default {
     editColumn() {
       this.editUser();
     },
-      toolbarClick(args) {
-        if (args.item.id === 'Grid_pdfexport') { // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
-            let pdfExportProperties = {
-                exportType: 'CurrentPage'
-            };
-            this.$refs.grid.pdfExport(pdfExportProperties);
-        } else {
-                      let excelExportProperties = {
-                exportType: 'CurrentPage'
-            };
-            this.$refs.grid.excelExport(excelExportProperties);
-        }
-    }
-
-    
+    toolbarClick(args) {
+      if (args.item.id === "Grid_pdfexport") {
+        // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
+        let pdfExportProperties = {
+          exportType: "CurrentPage",
+        };
+        this.$refs.grid.pdfExport(pdfExportProperties);
+      } else {
+        let excelExportProperties = {
+          exportType: "CurrentPage",
+        };
+        this.$refs.grid.excelExport(excelExportProperties);
+      }
+    },
   },
   computed: {
     ...mapState(["users"]),
@@ -176,7 +174,17 @@ export default {
     this.fetchUsers();
   },
   provide: {
-    grid: [Search, Filter, Page, Sort, ColumnChooser, Edit, Toolbar, PdfExport, ExcelExport],
+    grid: [
+      Search,
+      Filter,
+      Page,
+      Sort,
+      ColumnChooser,
+      Edit,
+      Toolbar,
+      PdfExport,
+      ExcelExport,
+    ],
   },
 };
 </script>
