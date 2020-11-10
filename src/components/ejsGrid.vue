@@ -6,23 +6,46 @@
       <label class="e-float-text">Search text</label>
     </div>
     <ejs-button id="search" @click.native="search">Search</ejs-button>
-    <ejs-grid ref="grid" :dataSource="data" height="262px">
+    <ejs-grid
+      ref="grid"
+      :dataSource="data"
+      :allowFiltering="true"
+      height="262px"
+    >
       <e-columns>
         <e-column
-          field="OrderID"
-          headerText="Order ID"
+          field="ID"
+          headerText="ID"
           width="100"
           textAlign="Center"
         ></e-column>
         <e-column
-          field="CustomerID"
-          headerText="Customer ID"
+          field="Name"
+          headerText="Name"
           width="120"
           textAlign="Center"
         ></e-column>
         <e-column
-          field="Freight"
-          headerText="Freight"
+          field="Birth"
+          headerText="Birth Date"
+          width="100"
+          textAlign="Center"
+        ></e-column>
+        <e-column
+          field="Salary"
+          headerText="Salary"
+          width="100"
+          textAlign="Center"
+        ></e-column>
+        <e-column
+          field="Email"
+          headerText="Email"
+          width="100"
+          textAlign="Center"
+        ></e-column>
+        <e-column
+          field="Mobile"
+          headerText="Mobile"
           width="100"
           textAlign="Center"
         ></e-column>
@@ -32,7 +55,7 @@
 </template>
 <script>
 import Vue from "vue";
-import { GridPlugin, Toolbar, Search } from "@syncfusion/ej2-vue-grids";
+import { GridPlugin, Filter, Search } from "@syncfusion/ej2-vue-grids";
 import { ButtonPlugin } from "@syncfusion/ej2-vue-buttons";
 
 Vue.use(GridPlugin);
@@ -43,49 +66,28 @@ export default {
     return {
       data: [
         {
-          OrderID: 10248,
-          CustomerID: "VINET",
-          Freight: 32.38,
+          ID: 10248,
+          Name: "VINET",
+          Birth: 32.38,
+          Salary: 1000,
+          Email: "test@test.co",
+          Mobile: 123456,
         },
         {
-          OrderID: 10249,
-          CustomerID: "TOMSP",
-          Freight: 11.61,
+          ID: 10249,
+          Name: "TOMSP",
+          Birth: 11.61,
+          Salary: 1000,
+          Email: "test@test.co",
+          Mobile: 123456,
         },
         {
-          OrderID: 10250,
-          CustomerID: "HANAR",
-          Freight: 65.83,
-        },
-        {
-          OrderID: 10251,
-          CustomerID: "VICTE",
-          Freight: 41.34,
-        },
-        {
-          OrderID: 10252,
-          CustomerID: "SUPRD",
-          Freight: 51.3,
-        },
-        {
-          OrderID: 10253,
-          CustomerID: "HANAR",
-          Freight: 58.17,
-        },
-        {
-          OrderID: 10254,
-          CustomerID: "CHOPS",
-          Freight: 22.98,
-        },
-        {
-          OrderID: 10255,
-          CustomerID: "RICSU",
-          Freight: 148.33,
-        },
-        {
-          OrderID: 10256,
-          CustomerID: "WELLI",
-          Freight: 13.97,
+          ID: 10250,
+          Name: "HANAR",
+          Birth: 65.83,
+          Salary: 1000,
+          Email: "test@test.co",
+          Mobile: 123456,
         },
       ],
     };
@@ -97,7 +99,7 @@ export default {
     },
   },
   provide: {
-    grid: [Search],
+    grid: [Search, Filter],
   },
 };
 </script>
