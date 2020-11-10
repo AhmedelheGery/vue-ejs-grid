@@ -18,6 +18,17 @@ export default new Vuex.Store({
         })
         .catch((err) => console.log(err));
     },
+    editUser({ commit }, id, data) {
+      axios
+        .put(
+          `https://jsonplaceholder.typicode.com/users/${id}`,
+          JSON.stringify(data)
+        )
+        .then((res) => {
+          let users = res.data;
+        })
+        .catch((err) => console.log(err));
+    },
   },
   mutations: {
     setUsers(state, users) {

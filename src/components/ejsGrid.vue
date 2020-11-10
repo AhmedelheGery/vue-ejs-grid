@@ -15,9 +15,9 @@
         >
       </div>
       <div class="hide-columns-wrapper">
-        <ejs-button 
-        class="e-info e-outline"
-         @click.native="show">open Column Chooser </ejs-button>
+        <ejs-button class="e-info e-outline" @click.native="show"
+          >open Column Chooser
+        </ejs-button>
       </div>
       <div class="records-input-wrapper">
         <div class="e-float-input" style="width: 200px; display: inline-block;">
@@ -26,16 +26,23 @@
           <label class="e-float-text">Enter Records Number</label>
         </div>
       </div>
+      <button @click="editColumn">edit</button>
     </div>
 
     <ejs-grid
       ref="grid"
+      id='Grid'
       :dataSource="usersData"
       :allowFiltering="true"
       :allowPaging="true"
       :pageSettings="{ pageSize: recordsNumber }"
       :allowSorting="true"
-      :showColumnChooser='true'
+      :showColumnChooser="true"
+      :editSettings="editSettings"
+      :allowPdfExport="true"
+      :toolbarClick="toolbarClick"
+      :toolbar="toolbarOptions"
+      :allowExcelExport='true'
       height="600px"
     >
       <e-columns>
@@ -90,6 +97,10 @@ import {
   Page,
   Sort,
   ColumnChooser,
+  Edit,
+  Toolbar, 
+  PdfExport,
+  ExcelExport
 } from "@syncfusion/ej2-vue-grids";
 import { ButtonPlugin } from "@syncfusion/ej2-vue-buttons";
 
@@ -100,10 +111,12 @@ export default {
   data() {
     return {
       recordsNumber: 10,
+      editSettings: { allowEditing: true },
+      toolbarOptions: ['PdfExport','ExcelExport']
     };
   },
   methods: {
-    ...mapActions(["fetchUsers"]),
+    ...mapActions(["fetchUsers", "editUser"]),
     search: function() {
       let searchText = document.getElementsByClassName("searchtext")[0].value;
       this.$refs.grid.search(searchText);
@@ -115,9 +128,30 @@ export default {
         .toISOString()
         .slice(0, 10);
     },
-        show: function() {
-        this.$refs.grid.ej2Instances.columnChooserModule.openColumnChooser(200, 50); // give X and Y axis
+    show: function() {
+      this.$refs.grid.ej2Instances.columnChooserModule.openColumnChooser(
+        200,
+        50
+      ); // give X and Y axis
+    },
+    editColumn() {
+      this.editUser();
+    },
+      toolbarClick(args) {
+        if (args.item.id === 'Grid_pdfexport') { // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
+            let pdfExportProperties = {
+                exportType: 'CurrentPage'
+            };
+            this.$refs.grid.pdfExport(pdfExportProperties);
+        } else {
+                      let excelExportProperties = {
+                exportType: 'CurrentPage'
+            };
+            this.$refs.grid.excelExport(excelExportProperties);
+        }
     }
+
+    
   },
   computed: {
     ...mapState(["users"]),
@@ -142,7 +176,7 @@ export default {
     this.fetchUsers();
   },
   provide: {
-    grid: [Search, Filter, Page, Sort, ColumnChooser],
+    grid: [Search, Filter, Page, Sort, ColumnChooser, Edit, Toolbar, PdfExport, ExcelExport],
   },
 };
 </script>
